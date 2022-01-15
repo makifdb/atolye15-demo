@@ -4,7 +4,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: cimg/node:16.13.2
+      - image: cimg/node:16
     parallelism: 4
 
     steps:
@@ -30,11 +30,20 @@ jobs:
       - run: yarn test:cov
       - run: yarn test:e2e
 
-  build:
+  build-stage:
     machine: true
     steps:
       - checkout
       - run: docker build --target builder -t makifdb/atolye15-demo:lasest .
+      - run: docker build --target installer -t makifdb/atolye15-demo:lasest .
+      - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+      - run: docker push makifdb/atolye15-demo
+
+  build-production:
+    machine: true
+    steps:
+      - checkout
+      - run: docker build -t makifdb/atolye15-demo:produciton .
       - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
       - run: docker push makifdb/atolye15-demo
 

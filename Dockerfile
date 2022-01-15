@@ -1,12 +1,30 @@
-FROM node:16.13.2-alpine
+# Stage 0
+FROM node:16.13.2-alpine as builder
 
-# Create app directory
+ENV NO_UPDATE_NOTIFIER true
+
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN yarn
+RUN yarn install
 
+COPY . .
+
+CMD [ "yarn", "start"]
+
+# Stage 1
+FROM node:16.13.2-alpine
+
+ENV NO_UPDATE_NOTIFIER true
+
+WORKDIR /usr/src/app
+
+COPY --from=builder dist ./dist     
+COPY --from=builder public ./public
+COPY package*.json ./
+
+RUN yarn --production=true --ignore-optinal
 COPY . .
 
 EXPOSE 3000

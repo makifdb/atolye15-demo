@@ -8,7 +8,7 @@ https://api.mailjet.com/v3.1/send \
     {
       "From": {
         "Email": "mail@makifdb.com",
-        "Name": "Mehmet Akif"
+        "Name": "BuildBot"
       },
       "To": [
         {

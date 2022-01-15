@@ -36,7 +36,7 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - run: docker build -t makifdb/atolye15-demo:lasest .
+      - run: docker build --target builder -t makifdb/atolye15-demo:lasest .
       - run: docker login -u makifdb -p $DOCKER_PASS
       - run: docker push makifdb/atolye15-demo
 

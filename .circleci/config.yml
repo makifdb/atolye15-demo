@@ -40,7 +40,7 @@ jobs:
       - run: docker push makifdb/atolye15-demo
       - run:
           name: Stage Build Mail
-          command: ./scripts/stage-mail.sh
+          command: /scripts/stage-mail.sh
 
   build-production:
     machine: true
@@ -51,7 +51,7 @@ jobs:
       - run: docker push makifdb/atolye15-demo
       - run:
           name: Production Build Mail
-          command: ./scripts/production-mail.sh
+          command: /scripts/production-mail.sh
 
 workflows:
   version: 2

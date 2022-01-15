@@ -49,9 +49,18 @@ jobs:
 
 workflows:
   version: 2
-  test-and-build:
+  test-build-production:
     jobs:
       - test
-      - build:
+      - build-stage:
           requires:
             - test
+          filters:
+            branches:
+              only: develop
+      - build-production:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master

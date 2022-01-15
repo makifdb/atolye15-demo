@@ -30,8 +30,7 @@ jobs:
       - run: yarn test:e2e
 
   deploy:
-    docker:
-      - image: cimg/node:16.13.2
+    machine: true
     working_directory: ~/app
     steps:
       - checkout

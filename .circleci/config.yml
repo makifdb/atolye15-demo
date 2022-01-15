@@ -38,6 +38,9 @@ jobs:
       - run: docker build --target installer -t makifdb/atolye15-demo:lasest .
       - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
       - run: docker push makifdb/atolye15-demo
+      - run:
+          name: Stage Build Mail
+          command: sh ./.circleci/scripts/stage-mail.sh
 
   build-production:
     machine: true
@@ -46,6 +49,9 @@ jobs:
       - run: docker build -t makifdb/atolye15-demo:produciton .
       - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
       - run: docker push makifdb/atolye15-demo
+      - run:
+          name: Production Build Mail
+          command: sh ./.circleci/scripts/production-mail.sh
 
 workflows:
   version: 2

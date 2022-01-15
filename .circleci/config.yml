@@ -36,7 +36,6 @@ jobs:
       - run: yarn test:e2e
 
   build-stage:
-    machine: true
     docker:
       - image: cimg/python:3.10.1
     steps:
@@ -60,7 +59,6 @@ jobs:
           unauthenticated: true
 
   build-production:
-    machine: true
     docker:
       - image: cimg/python:3.10.1
     steps:

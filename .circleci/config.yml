@@ -3,7 +3,7 @@ version: 2.1 # using 2.1 provides access to orbs and other features
 jobs:
   build:
     docker:
-      - image: circleci/node:16.13.2
+      - image: cimg/node:16.13.2
 
     working_directory: ~/repo
 
@@ -32,7 +32,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/node:16.13.2
+      - image: cimg/node:16.13.2
     working_directory: ~/repo
     steps:
       - checkout

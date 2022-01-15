@@ -1,5 +1,5 @@
 # Stage 0
-FROM node:16-alpine as builder
+FROM node:16.13.2-alpine as builder
 
 ENV NO_UPDATE_NOTIFIER true
 
@@ -12,7 +12,7 @@ COPY . .
 RUN yarn build
 
 # Stage 1
-FROM node:16-alpine as installer
+FROM node:16.13.2-alpine as installer
 
 ENV NO_UPDATE_NOTIFIER true
 ENV TINI_VERSION v0.19.0

@@ -1,10 +1,11 @@
-version: 2.1 # using 2.1 provides access to orbs and other features
+# ~/.circleci/config.yml
 
+version: 2.1
 jobs:
-  build:
-    working_directory: ~/app
+  test:
     docker:
       - image: cimg/node:16.13.2
+    parallelism: 4
 
     steps:
       - checkout
@@ -29,20 +30,37 @@ jobs:
       - run: yarn test:cov
       - run: yarn test:e2e
 
-  deploy:
+  build-stage:
     machine: true
-    working_directory: ~/app
     steps:
       - checkout
       - run: docker build --target builder -t makifdb/atolye15-demo:lasest .
-      - run: docker login -u makifdb -p $DOCKER_PASS
+      - run: docker build --target installer -t makifdb/atolye15-demo:lasest .
+      - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+      - run: docker push makifdb/atolye15-demo
+
+  build-production:
+    machine: true
+    steps:
+      - checkout
+      - run: docker build -t makifdb/atolye15-demo:produciton .
+      - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
       - run: docker push makifdb/atolye15-demo
 
 workflows:
   version: 2
-  build-test-and-deploy:
+  test-build-production:
     jobs:
-      - build
-      - deploy:
+      - test
+      - build-stage:
           requires:
-            - build
+            - test
+          filters:
+            branches:
+              only: develop
+      - build-production:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master

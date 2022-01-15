@@ -36,7 +36,8 @@ jobs:
       - run: yarn test:e2e
 
   build-stage:
-    machine: true
+    docker:
+      - image: cimg/python:3.10.1
     steps:
       - checkout
       - run: docker build --target builder -t makifdb/atolye15-demo:lasest .
@@ -58,7 +59,8 @@ jobs:
           unauthenticated: true
 
   build-production:
-    machine: true
+    docker:
+      - image: cimg/python:3.10.1
     steps:
       - checkout
       - run: docker build -t makifdb/atolye15-demo:produciton .

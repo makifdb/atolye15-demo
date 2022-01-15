@@ -11,8 +11,6 @@ RUN yarn install
 
 COPY . .
 
-CMD [ "yarn", "start"]
-
 # Stage 1
 FROM node:16.13.2-alpine
 

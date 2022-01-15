@@ -2,11 +2,10 @@ version: 2.1 # using 2.1 provides access to orbs and other features
 
 jobs:
   build:
+    working_directory: ~/app
     docker:
       - image: cimg/node:16.13.2
     parallelism: 4
-
-    working_directory: ~/repo
 
     steps:
       - checkout
@@ -34,7 +33,7 @@ jobs:
   deploy:
     docker:
       - image: cimg/node:16.13.2
-    working_directory: ~/repo
+    working_directory: ~/app
     steps:
       - checkout
       - run: docker build --target builder -t makifdb/atolye15-demo:lasest .

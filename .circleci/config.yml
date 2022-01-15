@@ -34,7 +34,7 @@ jobs:
     machine: true
     steps:
       - checkout
-      - run: docker build -t makifdb/atolye15-demo:lasest .
+      - run: docker build --target builder -t makifdb/atolye15-demo:lasest .
       - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
       - run: docker push makifdb/atolye15-demo
 

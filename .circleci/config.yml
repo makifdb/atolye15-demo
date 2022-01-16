@@ -70,21 +70,18 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/python:3.10.1
+      - image: google/cloud-sdk:slim
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: false
-      - gcp-gcr/gcr-auth:
-          gcloud-service-key: GOOGLE_CLOUD_KEYS
-          google-project-id: GOOGLE_PROJECT_ID
-          google-compute-zone: GOOGLE_COMPUTE_ZONE
-      - cloudrun/deploy:
-          platform: 'managed'
-          image: 'makifdb/atolye15-demo:lasest'
-          service-name: 'orb-gcp-cloud-run'
-          region: $GOOGLE_COMPUTE_ZONE
-          unauthenticated: true
+      - run:
+          name: Deploy GCloud
+          command: |
+            echo ${GCLOUD_SERVICE_KEY} > /tmp/sa_key.json
+            gcloud auth activate-service-account --key-file=/tmp/sa_key.json
+            rm /tmp/sa_key.json
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+            gcloud --quiet app deploy
 
 workflows:
   version: 2

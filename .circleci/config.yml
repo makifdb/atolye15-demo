@@ -77,11 +77,11 @@ jobs:
       - run:
           name: Decode Project Keys
           command: |
-            echo $GCLOUD_SERVICE_KEY > base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+            echo $GOOGLE_CLOUD_KEYS > base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
             echo $GCP_PROJECT_KEY > ./gcloud-service-key.json
             cat ./gcloud-service-key.json
             cat ${HOME}/gcloud-service-key.json
-            export $GCP_SERVICE_KEY=cat(${HOME}/gcloud-service-key.json)
+            export $GOOGLE_CLOUD_KEYS=cat(${HOME}/gcloud-service-key.json)
             pwd
 
       - gcp-gcr/gcr-auth:

@@ -67,7 +67,6 @@ jobs:
           service-name: 'orb-gcp-cloud-run'
           region: $GOOGLE_COMPUTE_ZONE
           unauthenticated: true
-          role: roles/run.admin \
 
   deploy:
     docker:

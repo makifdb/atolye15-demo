@@ -36,8 +36,7 @@ jobs:
       - run: yarn test:e2e
 
   build-stage:
-    docker:
-      - image: cimg/python:3.10.1
+    machine: true
     steps:
       - checkout
       - run: docker build --target builder -t makifdb/atolye15-demo:lasest .
@@ -47,20 +46,9 @@ jobs:
       - run:
           name: Stage Build Mail
           command: sh ./.circleci/scripts/stage-mail.sh
-      - gcp-gcr/gcr-auth:
-          gcloud-service-key: GOOGLE_CLOUD_KEYS
-          google-project-id: GOOGLE_PROJECT_ID
-          google-compute-zone: GOOGLE_COMPUTE_ZONE
-      - cloudrun/deploy:
-          platform: 'managed'
-          image: 'makifdb/atolye15-demo:lasest'
-          service-name: 'orb-gcp-cloud-run'
-          region: $GOOGLE_COMPUTE_ZONE
-          unauthenticated: true
 
   build-production:
-    docker:
-      - image: cimg/python:3.10.1
+    machine: true
     steps:
       - checkout
       - run: docker build -t makifdb/atolye15-demo:produciton .
@@ -79,10 +67,27 @@ jobs:
           service-name: 'orb-gcp-cloud-run'
           region: $GOOGLE_COMPUTE_ZONE
           unauthenticated: true
+  deploy:
+    docker:
+      - image: cimg/python:3.10.1
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - gcp-gcr/gcr-auth:
+          gcloud-service-key: GOOGLE_CLOUD_KEYS
+          google-project-id: GOOGLE_PROJECT_ID
+          google-compute-zone: GOOGLE_COMPUTE_ZONE
+      - cloudrun/deploy:
+          platform: 'managed'
+          image: 'makifdb/atolye15-demo:lasest'
+          service-name: 'orb-gcp-cloud-run'
+          region: $GOOGLE_COMPUTE_ZONE
+          unauthenticated: true
 
 workflows:
   version: 2
-  test-build-production:
+  test-build-and-deploy:
     jobs:
       - test
       - build-stage:
@@ -97,3 +102,6 @@ workflows:
           filters:
             branches:
               only: master
+      - deploy:
+          requires:
+            - build-stage

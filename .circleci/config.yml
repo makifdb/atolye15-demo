@@ -70,7 +70,7 @@ jobs:
 
   deploy:
     docker:
-      - image: google/cloud-sdk:slim
+      - image: google/cloud-sdk
     steps:
       - checkout
       - gcp-gcr/gcr-auth:

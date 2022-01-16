@@ -77,7 +77,7 @@ jobs:
       - run:
           name: Decode Project Keys
           command: |
-            echo $GOOGLE_CLOUD_KEYS > base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+            echo '$GOOGLE_CLOUD_KEYS' > base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
             echo $GCP_PROJECT_KEY > ./gcloud-service-key.json
             cat ./gcloud-service-key.json
             cat ${HOME}/gcloud-service-key.json

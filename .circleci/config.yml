@@ -74,21 +74,10 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: false
-      - run:
-          name: Decode Project Keys
-          command: |
-            echo '$GOOGLE_CLOUD_KEYS' > base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
-            echo $GCP_PROJECT_KEY > ./gcloud-service-key.json
-            cat ./gcloud-service-key.json
-            cat ${HOME}/gcloud-service-key.json
-            export $GOOGLE_CLOUD_KEYS=cat(${HOME}/gcloud-service-key.json)
-            pwd
-
       - gcp-gcr/gcr-auth:
           gcloud-service-key: GOOGLE_CLOUD_KEYS
           google-project-id: GOOGLE_PROJECT_ID
           google-compute-zone: GOOGLE_COMPUTE_ZONE
-
       - cloudrun/deploy:
           platform: 'managed'
           image: 'makifdb/atolye15-demo:lasest'

@@ -79,7 +79,7 @@ jobs:
           google-compute-zone: GOOGLE_COMPUTE_ZONE
       - cloudrun/deploy:
           platform: 'managed'
-          image: 'registry.hub.docker.com/makifdb/atolye15-demo:lasest'
+          image: 'docker.io/makifdb/atolye15-demo:lasest'
           service-name: 'orb-gcp-cloud-run'
           region: $GOOGLE_COMPUTE_ZONE
           unauthenticated: true

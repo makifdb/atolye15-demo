@@ -42,7 +42,7 @@ jobs:
       - run: docker build --target builder -t makifdb/atolye15-demo:lasest .
       - run: docker build --target installer -t makifdb/atolye15-demo:lasest .
       - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-      - run: docker push makifdb/atolye15-demo
+      - run: docker push makifdb/atolye15-demo:lasest
       - run:
           name: Stage Build Mail
           command: sh ./.circleci/scripts/stage-mail.sh
@@ -53,20 +53,11 @@ jobs:
       - checkout
       - run: docker build -t makifdb/atolye15-demo:produciton .
       - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-      - run: docker push makifdb/atolye15-demo
+      - run: docker push makifdb/atolye15-demo:produciton
       - run:
           name: Production Build Mail
           command: sh ./.circleci/scripts/production-mail.sh
-      - gcp-gcr/gcr-auth:
-          gcloud-service-key: GCLOUD_SERVICE_KEY
-          google-project-id: GOOGLE_PROJECT_ID
-          google-compute-zone: GOOGLE_COMPUTE_ZONE
-      - cloudrun/deploy:
-          platform: 'managed'
-          image: 'makifdb/atolye15-demo:produciton'
-          service-name: 'orb-gcp-cloud-run'
-          region: $GOOGLE_COMPUTE_ZONE
-          unauthenticated: true
+
   deploy:
     docker:
       - image: google/cloud-sdk
@@ -78,7 +69,7 @@ jobs:
           google-compute-zone: GOOGLE_COMPUTE_ZONE
       - cloudrun/deploy:
           platform: 'managed'
-          image: 'docker.io/makifdb/atolye15-demo:lasest'
+          image: 'docker.io/makifdb/atolye15-demo:produciton'
           service-name: 'orb-gcp-cloud-run'
           region: $GOOGLE_COMPUTE_ZONE
           unauthenticated: true

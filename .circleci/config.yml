@@ -2,6 +2,10 @@
 
 version: 2.1
 
+orbs:
+  gcp-gcr: circleci/gcp-gcr@0.13.0
+  cloudrun: circleci/gcp-cloud-run@1.0.2
+
 jobs:
   test:
     docker:
@@ -99,6 +103,3 @@ workflows:
       - deploy:
           requires:
             - build-production
-          filters:
-            branches:
-              only: master

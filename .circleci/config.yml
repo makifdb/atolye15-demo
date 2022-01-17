@@ -2,10 +2,6 @@
 
 version: 2.1
 
-orbs:
-  gcp-gcr: circleci/gcp-gcr@0.13.0
-  cloudrun: circleci/gcp-cloud-run@1.0.2
-
 jobs:
   test:
     docker:
@@ -67,7 +63,6 @@ jobs:
           service-name: 'orb-gcp-cloud-run'
           region: $GOOGLE_COMPUTE_ZONE
           unauthenticated: true
-
   deploy:
     docker:
       - image: google/cloud-sdk
@@ -103,4 +98,7 @@ workflows:
               only: master
       - deploy:
           requires:
-            - build-stage
+            - build-production
+          filters:
+            branches:
+              only: master
